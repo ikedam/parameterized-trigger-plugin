@@ -135,7 +135,7 @@ public class Plugin extends hudson.Plugin {
                 final List<TriggerBuilder> containedBuilders = ConditionalBuildStepHelper.getContainedBuilders(p, TriggerBuilder.class);
                 for (TriggerBuilder triggerBuilder : containedBuilders) {
                     for (BuildTriggerConfig co : triggerBuilder.getConfigs()){
-                        changed |= co.onJobRenamed(oldName, newName);
+                        changed |= co.onJobRenamed(p.getParent(), oldName, newName);
                     }
                 }
                 return changed;
@@ -153,7 +153,7 @@ public class Plugin extends hudson.Plugin {
                 for (TriggerBuilder triggerBuilder : containedBuilders) {
                     for (ListIterator<BlockableBuildTriggerConfig> bbtc = triggerBuilder.getConfigs().listIterator(); bbtc.hasNext();) {
                         BuildTriggerConfig c = bbtc.next();
-                        if (c.onDeleted(oldName)) {
+                        if (c.onDeleted(p.getParent(), oldName)) {
                             changed = true;
                             if (c.getProjects().length() == 0){
                                 bbtc.remove();
